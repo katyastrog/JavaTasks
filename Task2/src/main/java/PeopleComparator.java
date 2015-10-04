@@ -5,11 +5,11 @@ import java.util.Comparator;
  */
 public class PeopleComparator implements Comparator<People> {
 
-    public int compare(People o1, People o2) {
-        if (o1.getAge() < o2.getAge()) {
+    public int compare(People object1, People object2) {
+        if (object1.getAge() < object2.getAge()) {
             return -1;
         }
-        if (o1.getAge() > o2.getAge()) {
+        if (object1.getAge() > object2.getAge()) {
             return 1;
         } else {
             return 0;
