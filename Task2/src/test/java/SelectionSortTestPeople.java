@@ -3,7 +3,6 @@
  * Created by Екатерина on 03.10.2015.
  */
 
-
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,11 +17,11 @@ import java.util.Comparator;
 public class SelectionSortTestPeople {
     private static final SelectionSort SELECTION_SORT = new SelectionSort();
     private static final Object[][] TEST_DATA = {
-            //{SELECTION_SORT, new People[]{}},
+            {SELECTION_SORT, new People[]{}},
             {SELECTION_SORT, new People[]{new People(12, "Kate"), new People(52, "Chris"), new People(3, "Elly")}},
-            //{SELECTION_SORT, new People[]{new People(1, "Alex"), new People(2, "Gleb"), new People(3, "Serg")}},
-            //{SELECTION_SORT, new People[]{new People(2, "Ann"), new People(78, "Ark"), new People(75, "Roman"), new People(78, "Vlad")}},
-            //{SELECTION_SORT, new People[]{new People(45, "Leon"), new People(32, "Jack"), new People(8, "Tati")}},
+            {SELECTION_SORT, new People[]{new People(1, "Alex"), new People(2, "Gleb"), new People(3, "Serg")}},
+            {SELECTION_SORT, new People[]{new People(2, "Ann"), new People(78, "Ark"), new People(75, "Roman"), new People(78, "Vlad")}},
+            {SELECTION_SORT, new People[]{new People(45, "Leon"), new People(32, "Jack"), new People(8, "Tati")}},
     };
 
 
