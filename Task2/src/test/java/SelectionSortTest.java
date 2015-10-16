@@ -4,7 +4,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.awt.event.ComponentAdapter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -14,26 +13,26 @@ import java.util.Random;
 @RunWith(Parameterized.class)
 public class SelectionSortTest<T> {
 
-    private static final SelectionSort SELECTION_SORT = new SelectionSort();
-    private static Object[][] TEST_DATA_DOUBLE = initHumanDataTest();
-    private static final Object[][] TEST_DATA_PEOPLE = {
-            {SELECTION_SORT, new Human[]{}},
-            {SELECTION_SORT, new Human[]{new Human(12, "Kate"), new Human(52, "Chris"), new Human(3, "Elly")}},
-            {SELECTION_SORT, new Human[]{new Human(1, "Alex"), new Human(2, "Gleb"), new Human(3, "Serg")}},
-            {SELECTION_SORT, new Human[]{new Human(2, "Ann"), new Human(78, "Ark"), new Human(75, "Roman"), new Human(78, "Vlad")}},
-            {SELECTION_SORT, new Human[]{new Human(45, "Leon"), new Human(32, "Jack"), new Human(8, "Tati")}},
-    };
-
+    private static final Comparator<Human> HUMAN_COMPARATOR = new HumanNameComparator();//HumanAgeComparator
     private static final Comparator<Double> DOUBLE_COMPARATOR = new Comparator<Double>() {
         public int compare(final Double o1, final Double o2) {
-            return o1.compareTo(o2);
+            return o1.compareTo(o2);// o1.compareTo(-o2);
         }
     };
-    private static final Comparator<Human> HUMAN_COMPARATOR = new HumanComparator();
+    private static final SelectionSort SELECTION_SORT = new SelectionSort();
+
+    private static Object[][] TEST_DATA_DOUBLE = initHumanDataTest();
+    private static final Object[][] TEST_DATA_PEOPLE = {
+            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{}},
+            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(12, "Kate"), new Human(52, "Chris"), new Human(3, "Elly")}},
+            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(1, "Alex"), new Human(2, "Gleb"), new Human(3, "Serg")}},
+            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(2, "Ann"), new Human(78, "Ark"), new Human(75, "Roman"), new Human(78, "Vlad")}},
+            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(45, "Leon"), new Human(32, "Jack"), new Human(8, "Tati")}},
+    };
 
     private static Object[][] initHumanDataTest() {
         int arraySize = 5;
-        Object[][] data = new Object[arraySize][2];
+        Object[][] data = new Object[arraySize][3];
 
         Random rand = new Random();
         int numOfElem;
@@ -47,7 +46,8 @@ public class SelectionSortTest<T> {
             }
 
             data[i][0] = SELECTION_SORT;
-            data[i][1] = array;
+            data[i][1] = DOUBLE_COMPARATOR;
+            data[i][2] = array;
         }
 
         return data;
@@ -63,47 +63,28 @@ public class SelectionSortTest<T> {
 
     private Sort<T> sort;
     private T[] input;
+    private Comparator<T> comparator;
 
-    public SelectionSortTest(Sort<T> sort, T[] input) {
+    public SelectionSortTest(Sort<T> sort, Comparator<T> comparator, T[] input) {
         this.sort = sort;
+        this.comparator = comparator;
         this.input = input;
     }
 
     @Test
     public void testArraySorting() {
 
-        Object comparator = null;
+        T[] result = sort.sort(input, comparator);
 
-        if (input instanceof Human[]) {
-            comparator = HUMAN_COMPARATOR;
-        } else if (input instanceof Double[]) {
-            comparator = DOUBLE_COMPARATOR;
-        }
-
-        T[] result = sort.sort(input, (Comparator<T>) comparator);
-
-        Assert.assertTrue("The array is not sorted", testAscendingOrder(result, (Comparator<T>) comparator));
+        Assert.assertTrue("The array is not sorted", testAscendingOrder(result, comparator));
         Assert.assertEquals("Result array length should be equal to original", input.length, result.length);
-        Assert.assertTrue("Arrays consist of different elements", hasEachElementOf(input, result));
-        Assert.assertTrue("Arrays contain different number of the same elements", hasSameNumberOfIdenticalElements(input, result, (Comparator<T>) comparator));
+        Assert.assertTrue("Arrays contain different number of the same elements", hasSameNumberOfIdenticalElements(input, result, comparator));
     }
 
     private boolean testAscendingOrder(T[] array, Comparator<T> comparator) {
         for (int i = 0; i < array.length - 1; i++) {
             if (comparator.compare(array[i], array[i + 1]) > 0)
                 return false;
-        }
-        return true;
-    }
-
-    private boolean hasEachElementOf(T[] input, T[] result) {
-        for (T element : input) {
-            for (int j = 0; j < result.length; j++) {
-                if (result[j] == element)
-                    break;
-                if (j == result.length - 1)
-                    return false;
-            }
         }
         return true;
     }
