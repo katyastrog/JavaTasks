@@ -1,8 +1,15 @@
+package ru.spbstu.appmath.strogalshchikova;
+
+import java.util.Comparator;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import ru.spbstu.appmath.strogalshchikova.Human;
+import ru.spbstu.appmath.strogalshchikova.HumanNameComparator;
+import ru.spbstu.appmath.strogalshchikova.SelectionSort;
+import ru.spbstu.appmath.strogalshchikova.Sort;
 
 import java.util.Arrays;
 import java.util.Collection;

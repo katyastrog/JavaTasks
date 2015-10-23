@@ -1,3 +1,5 @@
+package ru.spbstu.appmath.strogalshchikova;
+
 import java.util.Comparator;
 
 public interface Sort<T> {

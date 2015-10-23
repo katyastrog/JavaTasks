@@ -2,6 +2,7 @@
 /**
  * Created by Екатерина on 26.09.2015.
  */
+package ru.spbstu.appmath.strogalshchikova;
 
 public class Human {
     private final int age;

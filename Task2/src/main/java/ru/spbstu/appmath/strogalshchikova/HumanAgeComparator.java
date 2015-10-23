@@ -1,6 +1,7 @@
 /**
  * Created by Екатерина on 30.09.2015.
  */
+package ru.spbstu.appmath.strogalshchikova;
 
 import java.util.Comparator;
 
