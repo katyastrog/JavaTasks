@@ -31,7 +31,7 @@ public class SelectionSortTest<T> {
     private static Object[][] TEST_DATA_DOUBLE = initHumanDataTest();
     private static final Object[][] TEST_DATA_PEOPLE = {
             {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{}},
-            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(12, "Kate"), new Human(52, "Chris"), new Human(3, "Elly")}},
+            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(12, "Kate"), new Human(52, "Chriss"), new Human(3, "Elly")}},
             {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(1, "Alex"), new Human(2, "Gleb"), new Human(3, "Serg")}},
             {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(2, "Ann"), new Human(78, "Ark"), new Human(75, "Roman"), new Human(78, "Vlad")}},
             {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(45, "Leon"), new Human(32, "Jack"), new Human(8, "Tati")}},
