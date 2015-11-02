@@ -20,21 +20,28 @@ import java.util.Random;
 @RunWith(Parameterized.class)
 public class SelectionSortTest<T> {
 
-    private static final Comparator<Human> HUMAN_COMPARATOR = new HumanNameComparator();//HumanAgeComparator
-    private static final Comparator<Double> DOUBLE_COMPARATOR = new Comparator<Double>() {
+    private static final Comparator<Human> HUMAN_NAME_COMPARATOR = new HumanNameComparator();
+    private static final Comparator<Human> HUMAN_AGE_COMPARATOR = new HumanAgeComparator();
+    private static final Comparator<Double> DOUBLE_DECREASE_COMPARATOR = new Comparator<Double>() {
         public int compare(final Double o1, final Double o2) {
-            return o1.compareTo(o2);// o1.compareTo(-o2);
+            return (-1)*o1.compareTo(o2);
+        }
+    };
+    private static final Comparator<Double> DOUBLE_INCREASE_COMPARATOR = new Comparator<Double>() {
+        public int compare(final Double o1, final Double o2) {
+            return o1.compareTo(o2);
         }
     };
     private static final SelectionSort SELECTION_SORT = new SelectionSort();
 
     private static Object[][] TEST_DATA_DOUBLE = initHumanDataTest();
     private static final Object[][] TEST_DATA_PEOPLE = {
-            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{}},
-            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(12, "Kate"), new Human(52, "Chriss"), new Human(3, "Elly")}},
-            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(1, "Alex"), new Human(2, "Gleb"), new Human(3, "Serg")}},
-            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(2, "Ann"), new Human(78, "Ark"), new Human(75, "Roman"), new Human(78, "Vlad")}},
-            {SELECTION_SORT, HUMAN_COMPARATOR, new Human[]{new Human(45, "Leon"), new Human(32, "Jack"), new Human(8, "Tati")}},
+            {SELECTION_SORT, HUMAN_NAME_COMPARATOR, new Human[]{}},
+            {SELECTION_SORT, HUMAN_AGE_COMPARATOR, new Human[]{}},
+            {SELECTION_SORT, HUMAN_NAME_COMPARATOR, new Human[]{new Human(12, "Kate"), new Human(52, "Chris"), new Human(3, "Elly")}},
+            {SELECTION_SORT, HUMAN_AGE_COMPARATOR, new Human[]{new Human(1, "Alex"), new Human(2, "Gleb"), new Human(3, "Serg")}},
+            {SELECTION_SORT, HUMAN_NAME_COMPARATOR, new Human[]{new Human(2, "Ann"), new Human(78, "Ark"), new Human(75, "Roman"), new Human(78, "Vlad")}},
+            {SELECTION_SORT, HUMAN_AGE_COMPARATOR, new Human[]{new Human(45, "Leon"), new Human(32, "Jack"), new Human(8, "Tati")}},
     };
 
     private static Object[][] initHumanDataTest() {
@@ -53,7 +60,10 @@ public class SelectionSortTest<T> {
             }
 
             data[i][0] = SELECTION_SORT;
-            data[i][1] = DOUBLE_COMPARATOR;
+            if(i % 2 == 0)
+                data[i][1] = DOUBLE_DECREASE_COMPARATOR;
+            else
+                data[i][1] = DOUBLE_INCREASE_COMPARATOR;
             data[i][2] = array;
         }
 
@@ -63,8 +73,8 @@ public class SelectionSortTest<T> {
 
     @Parameterized.Parameters
     public static Collection<Object[]> testData() {
-        return Arrays.asList(TEST_DATA_PEOPLE);
-//        return  Arrays.asList(TEST_DATA_DOUBLE);
+       // return Arrays.asList(TEST_DATA_PEOPLE);
+      return  Arrays.asList(TEST_DATA_DOUBLE);
     }
 
 
@@ -82,10 +92,10 @@ public class SelectionSortTest<T> {
     public void testArraySorting() {
 
         T[] result = sort.sort(input, comparator);
-
         Assert.assertTrue("The array is not sorted", testAscendingOrder(result, comparator));
         Assert.assertEquals("Result array length should be equal to original", input.length, result.length);
         Assert.assertTrue("Arrays contain different number of the same elements", hasSameNumberOfIdenticalElements(input, result, comparator));
+
     }
 
     private boolean testAscendingOrder(T[] array, Comparator<T> comparator) {
