@@ -6,14 +6,9 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import ru.spbstu.appmath.strogalshchikova.Human;
-import ru.spbstu.appmath.strogalshchikova.HumanNameComparator;
-import ru.spbstu.appmath.strogalshchikova.SelectionSort;
-import ru.spbstu.appmath.strogalshchikova.Sort;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Random;
 
 
@@ -24,7 +19,7 @@ public class SelectionSortTest<T> {
     private static final Comparator<Human> HUMAN_AGE_COMPARATOR = new HumanAgeComparator();
     private static final Comparator<Double> DOUBLE_DECREASE_COMPARATOR = new Comparator<Double>() {
         public int compare(final Double o1, final Double o2) {
-            return (-1)*o1.compareTo(o2);
+            return (-1) * o1.compareTo(o2);
         }
     };
     private static final Comparator<Double> DOUBLE_INCREASE_COMPARATOR = new Comparator<Double>() {
@@ -34,47 +29,38 @@ public class SelectionSortTest<T> {
     };
     private static final SelectionSort SELECTION_SORT = new SelectionSort();
 
-    private static Object[][] TEST_DATA_DOUBLE = initHumanDataTest();
-    private static final Object[][] TEST_DATA_PEOPLE = {
+    private static Object[][] TEST_DATA = {
             {SELECTION_SORT, HUMAN_NAME_COMPARATOR, new Human[]{}},
             {SELECTION_SORT, HUMAN_AGE_COMPARATOR, new Human[]{}},
             {SELECTION_SORT, HUMAN_NAME_COMPARATOR, new Human[]{new Human(12, "Kate"), new Human(52, "Chris"), new Human(3, "Elly")}},
             {SELECTION_SORT, HUMAN_AGE_COMPARATOR, new Human[]{new Human(1, "Alex"), new Human(2, "Gleb"), new Human(3, "Serg")}},
             {SELECTION_SORT, HUMAN_NAME_COMPARATOR, new Human[]{new Human(2, "Ann"), new Human(78, "Ark"), new Human(75, "Roman"), new Human(78, "Vlad")}},
             {SELECTION_SORT, HUMAN_AGE_COMPARATOR, new Human[]{new Human(45, "Leon"), new Human(32, "Jack"), new Human(8, "Tati")}},
+            {SELECTION_SORT, DOUBLE_DECREASE_COMPARATOR, getArrayDouble(5)},
+            {SELECTION_SORT, DOUBLE_DECREASE_COMPARATOR, getArrayDouble(10)},
+            {SELECTION_SORT, DOUBLE_DECREASE_COMPARATOR, getArrayDouble(0)},
+            {SELECTION_SORT, DOUBLE_INCREASE_COMPARATOR, getArrayDouble(8)},
+            {SELECTION_SORT, DOUBLE_INCREASE_COMPARATOR, getArrayDouble(2)},
+            {SELECTION_SORT, DOUBLE_INCREASE_COMPARATOR, getArrayDouble(0)}
     };
 
-    private static Object[][] initHumanDataTest() {
-        int arraySize = 5;
-        Object[][] data = new Object[arraySize][3];
+
+    private static Double[] getArrayDouble(final int size) {
 
         Random rand = new Random();
-        int numOfElem;
-        Double[] array;
-        for (int i = 0; i < arraySize; i++) {
-            numOfElem = rand.nextInt(20);
-            array = new Double[numOfElem];
+        Double[] array = new Double[size];
 
-            for (int j = 0; j < array.length; j++) {
-                array[j] = Math.floor(rand.nextDouble() * 100.0) / 10.0 - 5.0;
-            }
-
-            data[i][0] = SELECTION_SORT;
-            if(i % 2 == 0)
-                data[i][1] = DOUBLE_DECREASE_COMPARATOR;
-            else
-                data[i][1] = DOUBLE_INCREASE_COMPARATOR;
-            data[i][2] = array;
+        for (int i = 0; i < array.length; i++) {
+            array[i] = Math.floor(rand.nextDouble() * 100.0) / 10.0 - 5.0;
         }
 
-        return data;
+        return array;
     }
 
 
     @Parameterized.Parameters
     public static Collection<Object[]> testData() {
-       // return Arrays.asList(TEST_DATA_PEOPLE);
-      return  Arrays.asList(TEST_DATA_DOUBLE);
+        return Arrays.asList(TEST_DATA);
     }
 
 
