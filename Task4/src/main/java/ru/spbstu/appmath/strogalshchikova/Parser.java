@@ -1,75 +1,54 @@
 package ru.spbstu.appmath.strogalshchikova;
 
-import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-/**
- * Created by Екатерина on 29.11.2015.
- */
 public class Parser {
-    public static void doOperator (Stack operands, Stack operators) throws StackException {
-        ExpressionTree operandFirst = (ExpressionTree)operands.pop();
-        ExpressionTree operandSecond = (ExpressionTree)operands.pop();
-        char operationSign = ((LexOperator)operators.pop()).getOperatorSign();
-        operands.push(new ExpressionTree(new Operator(operationSign, operandFirst, operandSecond)));
-    }
 
-    public static void doOperators (Stack operands, Stack operators, int minPriority) throws StackException {
-        while (!operators.isEmpty() && ((LexOperator)operators.top()).getPriority() >= minPriority){
-            doOperator(operands, operators);
+    private static final String RE_UNUM = "(\\d+(\\.\\d+)?)"; // regex for unsigned numeric
+    private static final String RE_NUM = "(\\-?" + RE_UNUM + ")"; // regex for signed numeric
+    private static final String RE_RANGE = RE_NUM + ":+" + RE_NUM + "(:+" + RE_NUM + ")?"; // regex for range ('min:max[:step]')
+    private static final String RE_LITERALS = "[a-zA-Z]";
+    private static final String RE_OPERANDS = "[()*/+\\-]";
+    private static final String REGEX = RE_RANGE    + "|" +
+                                        RE_LITERALS + "|" +
+                                        RE_OPERANDS + "|" +
+                                        RE_UNUM;
+
+    public static List<String> parse(final String[] arg) {
+        String input = "";
+
+        for (String s : arg) {
+            input += s;
         }
+
+        return parse(input);
     }
 
-    public static ExpressionTree parse(String source) throws ParseException {
-        final int WAIT_OPERAND = 1;
-        final int WAIT_OPERATOR = 2;
-        Stack operands = new ArrayStack();
-        Stack operators = new ArrayStack();
+    public static List<String> parse(final String input) {
+        List<String> parsedInput = new ArrayList<>();
+        String trimmedInput = input.trim();
+        Matcher matcher = Pattern.compile(REGEX).matcher(trimmedInput);
 
-        LexAnalyzer analyzer = new LexAnalyzer(source);
+        while (matcher.find()) {
+            parsedInput.add(trimmedInput.substring(matcher.start(), matcher.end()));
+        }
+        //
+        int totalLength = 0;
+        for (String s : parsedInput) {
+            totalLength += s.length();
+        }
 
-        int waitFlag = WAIT_OPERAND;
-        try {
-            while (analyzer.hasNext()) {
-                Lexical lex = (Lexical) analyzer.next();
-                if (lex == null) {
-                    throw new ParseException("Неизвестная лексема", analyzer.getCurrentPosition());
-                }
-                if (waitFlag == WAIT_OPERAND) {
-                    switch (lex.getLexClass()) {
-                        case Lexical.NUMBER:
-                            operands.push(new ExpressionTree(((LexNumber) lex).getNumber()));
-                            waitFlag = WAIT_OPERATOR;
-                            break;
-                        case Lexical.VARIABLE:
-                            operands.push(new ExpressionTree(((LexVariable) lex).getVariable()));
-                            waitFlag = WAIT_OPERATOR;
-                            break;
-                        case Lexical.LEFTPAR:
-                            operators.push(lex);
-                            break;
-                        default:
-                            throw new ParseException("Ожидался операнд", analyzer.getCurrentPosition());
-                    }
-                } else {
-                    switch (lex.getLexClass()) {
-                        case Lexical.RIGHTPAR:
-                            doOperators(operands, operators, 1);
-                            operators.pop();
-                            break;
-                        case Lexical.OPERATOR:
-                            doOperators(operands, operators, ((LexOperator) lex).getPriority());
-                            operators.push(lex);
-                            waitFlag = WAIT_OPERAND;
-                            break;
-                        default:
-                            throw new ParseException("Ожидался знак операции", analyzer.getCurrentPosition());
-                    }
-                }
+        if (totalLength != trimmedInput.replaceAll("\\s", "").length()) {
+            System.out.println("Unhandled symbol");
+        } else {
+            for (String s : parsedInput) {
+                System.out.print(s + ", ");
             }
-            doOperators(operands, operators, 0);
-            return (ExpressionTree) operands.pop();
-        } catch (StackException ex) {
-            throw new ParseException("Ошибка в скобочной структуре выражения", analyzer.getCurrentPosition());
+            System.out.println();
         }
+        return parsedInput;
     }
 }
