@@ -1,9 +1,8 @@
 package ru.spbstu.appmath.strogalshchikova;
 
-public abstract class AbstractStack<T> implements Stack<T> {
+public abstract class AbstractStack<T> {
     private int size;
 
-    @Override
     public void push(T element) {
         pushInternal(element);
         size++;
@@ -21,8 +20,7 @@ public abstract class AbstractStack<T> implements Stack<T> {
 
     protected abstract T popInternal();
 
-    @Override
-    public T top() {
+    public T peek() {
         if (size == 0) {
             return null;
         }

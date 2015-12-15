@@ -20,8 +20,13 @@ public class LexAnalyzer implements Iterator {
     }
 
     public Object next () {
-        if (expression.charAt(currentPosition) == '+' || expression.charAt(currentPosition) == '-' || expression.charAt(currentPosition) == '*' ||
-                expression.charAt(currentPosition) == '/' || expression.charAt(currentPosition) == '(' || expression.charAt(currentPosition) == ')'){
+        if (expression.charAt(currentPosition) == '+' ||
+                expression.charAt(currentPosition) == '-' ||
+                expression.charAt(currentPosition) == '*' ||
+                expression.charAt(currentPosition) == '/' ||
+                expression.charAt(currentPosition) == '(' ||
+                expression.charAt(currentPosition) == ')'
+                ){
             currentPosition++;
             return expression.charAt(currentPosition);
         }

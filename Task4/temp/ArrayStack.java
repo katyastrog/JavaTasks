@@ -1,7 +1,7 @@
 package ru.spbstu.appmath.strogalshchikova;
 
 import java.util.Arrays;
-public final class ArrayStack<T> extends ru.spbstu.appmath.strogalshchikova.AbstractStack<T> {
+public final class ArrayStack<T> extends AbstractStack<T> {
 
     private static final int DEFAULT_CAPACITY = 5;
 
