@@ -17,7 +17,7 @@ public class Parser {
                                         RE_OPERANDS + "|" +
                                         RE_UNUM;
 
-    public static List<String> parse(final String[] arg) {
+    public static List<String> parse(final String[] arg) throws UnhandledSymbolException {
         String input = "";
 
         for (String s : arg) {
@@ -27,7 +27,7 @@ public class Parser {
         return parse(input);
     }
 
-    public static List<String> parse(final String input) {
+    public static List<String> parse(final String input) throws UnhandledSymbolException {
         List<String> parsedInput = new ArrayList<>();
         String trimmedInput = input.trim();
         Matcher matcher = Pattern.compile(REGEX).matcher(trimmedInput);
@@ -41,14 +41,9 @@ public class Parser {
             totalLength += s.length();
         }
 
-        if (totalLength != trimmedInput.replaceAll("\\s", "").length()) {
-            System.out.println("Unhandled symbol");
-        } else {
-            for (String s : parsedInput) {
-                System.out.print(s + ", ");
-            }
-            System.out.println();
-        }
+        if (totalLength != trimmedInput.replaceAll("\\s", "").length())
+            throw new UnhandledSymbolException();
+
         return parsedInput;
     }
 }
