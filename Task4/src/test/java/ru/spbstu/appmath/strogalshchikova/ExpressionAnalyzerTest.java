@@ -4,15 +4,14 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import ru.spbstu.appmath.strogalshchikova.exceptions.ParenthesesBalanceException;
+import ru.spbstu.appmath.strogalshchikova.exceptions.TooManyVariablesException;
+import ru.spbstu.appmath.strogalshchikova.exceptions.WrongRangeException;
+import ru.spbstu.appmath.strogalshchikova.exceptions.WrongSyntaxException;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 public class ExpressionAnalyzerTest {
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     private static String[] correctInput = {
             "x 12:20:2",
@@ -35,6 +34,8 @@ public class ExpressionAnalyzerTest {
             "(((((((x * 5)- 7) / x) / 10) - 7) * x) + x",
             "x + (x + 10.324)*x/((x) - 7.0)) 34:334"
     };
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void testAnalyze() throws Exception {

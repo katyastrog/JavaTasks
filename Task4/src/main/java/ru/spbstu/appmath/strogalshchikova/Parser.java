@@ -1,5 +1,7 @@
 package ru.spbstu.appmath.strogalshchikova;
 
+import ru.spbstu.appmath.strogalshchikova.exceptions.UnhandledLexemeException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;

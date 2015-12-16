@@ -4,13 +4,11 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import ru.spbstu.appmath.strogalshchikova.exceptions.UnhandledLexemeException;
 
 import java.util.List;
 
 public class ParserTest {
-
-    @Rule
-    public ExpectedException exception = ExpectedException.none();
 
     private static String[] correctInput = {
             " ",
@@ -36,7 +34,8 @@ public class ParserTest {
             "((((yt(((x * 5)- 7) / x) / 10) - 7) * x) + x",
             "@#$%$%x + (x + 10.324)*x/((x) - 7.0)"
     };
-
+    @Rule
+    public ExpectedException exception = ExpectedException.none();
 
     @Test
     public void testParse() throws Exception {

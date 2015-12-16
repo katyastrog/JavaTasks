@@ -1,7 +1,8 @@
-package ru.spbstu.appmath.strogalshchikova;
+package ru.spbstu.appmath.strogalshchikova.exceptions;
 
 public class WrongSyntaxException extends Exception {
-    public WrongSyntaxException() { super();
+    public WrongSyntaxException() {
+        super();
     }
 
     public WrongSyntaxException(String message) {

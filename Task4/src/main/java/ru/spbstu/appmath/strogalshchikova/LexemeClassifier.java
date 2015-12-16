@@ -1,5 +1,7 @@
 package ru.spbstu.appmath.strogalshchikova;
 
+import ru.spbstu.appmath.strogalshchikova.exceptions.UnhandledLexemeException;
+
 public class LexemeClassifier {
     public static LexemeType classify(String lexeme) throws UnhandledLexemeException {
         if (lexeme.length() == 0)

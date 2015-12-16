@@ -1,5 +1,7 @@
 package ru.spbstu.appmath.strogalshchikova;
 
+import ru.spbstu.appmath.strogalshchikova.exceptions.*;
+
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,10 +14,6 @@ public class ExpressionAnalyzer {
         int parentheses = 0;
         boolean isVarExpected = false;
 
-        for (String s : input) {
-            System.out.print("'" + s + "' ");
-        }
-        System.out.println();
 
         // when only lexeme exists
         if (input.size() == 1) {
@@ -24,7 +22,7 @@ public class ExpressionAnalyzer {
                 return result;
             } else {
                 throw new WrongSyntaxException();
-             }
+            }
         }
 
         // check if variable is expected
@@ -93,7 +91,6 @@ public class ExpressionAnalyzer {
             parentheses++;
         else if (input.get(last).equals(")"))
             parentheses--;
-
 
 
         if (parentheses != 0)
