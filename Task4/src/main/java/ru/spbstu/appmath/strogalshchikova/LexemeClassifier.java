@@ -5,21 +5,23 @@ public class LexemeClassifier {
         if (lexeme.length() == 0)
             throw new IllegalArgumentException();
 
-        final String parentheses = "()";
+        //final String brackets = "()";
         final String operands = "+-*/";
 
         if (lexeme.matches(Parser.RE_NUM)) { // numbers
             return LexemeType.NUMBER;
         } else if (operands.contains(lexeme) && lexeme.length() == 1) { // operands
             return LexemeType.OPERAND;
-        } else if (parentheses.contains(lexeme) && lexeme.length() == 1) { // parentheses
-            return LexemeType.PARENTHESES;
+        } else if (lexeme.equals("(")) { // left bracket
+            return LexemeType.LEFT_BRACKET;
+        } else if (lexeme.equals(")")) { // right bracket
+            return LexemeType.RIGHT_BRACKET;
         } else if (lexeme.matches(Parser.RE_LETTERS)) { // variables and constants
             if (isConstant(lexeme))
                 return LexemeType.CONSTANT;
             else
                 return LexemeType.VARIABLE;
-        } else  if (lexeme.matches(Parser.RE_RANGE)) { // variable range
+        } else if (lexeme.matches(Parser.RE_RANGE)) { // variable range
             return LexemeType.RANGE;
         } else {
             throw new UnhandledLexemeException();
