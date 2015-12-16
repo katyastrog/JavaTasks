@@ -13,6 +13,8 @@ public class ParserTest {
     public ExpectedException exception = ExpectedException.none();
 
     private static String[] correctInput = {
+            " ",
+            "xregergerg ergerg egr",
             "x",
             "x 12:3:-2",
             "(5 + x) / x",
@@ -39,9 +41,12 @@ public class ParserTest {
     @Test
     public void testParse() throws Exception {
         for (String data : correctInput) {
-            List<String> parsedString = Parser.parse(data);
+            List<String> parsedInput = Parser.parse(data);
 
-            for (String s : parsedString) {
+            Assert.assertNotNull(parsedInput);
+
+
+            for (String s : parsedInput) {
                 System.out.print("'" + s + "' ");
             }
             System.out.println();
@@ -49,7 +54,7 @@ public class ParserTest {
 
         for (String data : incorrectInput) {
             Parser.parse(data);
-            exception.expect(UnhandledSymbolException.class);
+            exception.expect(UnhandledLexemeException.class);
         }
     }
 }

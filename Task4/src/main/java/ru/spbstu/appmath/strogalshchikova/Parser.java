@@ -7,17 +7,14 @@ import java.util.regex.Pattern;
 
 public class Parser {
 
-    private static final String RE_UNUM = "(\\d+(\\.\\d+)?)"; // regex for unsigned numeric
-    private static final String RE_NUM = "(\\-?" + RE_UNUM + ")"; // regex for signed numeric
-    private static final String RE_RANGE = RE_NUM + ":+" + RE_NUM + "(:+" + RE_NUM + ")?"; // regex for range ('min:max[:step]')
-    private static final String RE_LITERALS = "[a-zA-Z]";
-    private static final String RE_OPERANDS = "[()*/+\\-]";
-    private static final String REGEX = RE_RANGE    + "|" +
-                                        RE_LITERALS + "|" +
-                                        RE_OPERANDS + "|" +
-                                        RE_UNUM;
+    public static final String RE_UNUM = "(\\d+(\\.\\d+)?)"; // regex for unsigned numeric
+    public static final String RE_NUM = "(\\-?" + RE_UNUM + ")"; // regex for signed numeric
+    public static final String RE_RANGE = RE_NUM + ":+" + RE_NUM + "(:+" + RE_NUM + ")?"; // regex for range ('min:max[:step]')
+    public static final String RE_LETTERS = "[a-zA-Z]+";
+    public static final String RE_OPERANDS = "[()*/+\\-]";
+    private static final String REGEX = RE_RANGE + "|" + RE_LETTERS + "|" + RE_OPERANDS + "|" + RE_UNUM;
 
-    public static List<String> parse(final String[] arg) throws UnhandledSymbolException {
+    public static List<String> parse(final String[] arg) throws UnhandledLexemeException {
         String input = "";
 
         for (String s : arg) {
@@ -27,7 +24,7 @@ public class Parser {
         return parse(input);
     }
 
-    public static List<String> parse(final String input) throws UnhandledSymbolException {
+    public static List<String> parse(final String input) throws UnhandledLexemeException {
         List<String> parsedInput = new ArrayList<>();
         String trimmedInput = input.trim();
         Matcher matcher = Pattern.compile(REGEX).matcher(trimmedInput);
@@ -42,7 +39,7 @@ public class Parser {
         }
 
         if (totalLength != trimmedInput.replaceAll("\\s", "").length())
-            throw new UnhandledSymbolException();
+            throw new UnhandledLexemeException();
 
         return parsedInput;
     }
