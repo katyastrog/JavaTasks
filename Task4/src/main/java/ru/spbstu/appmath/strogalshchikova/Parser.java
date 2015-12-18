@@ -14,7 +14,7 @@ public class Parser {
     public static final String RE_RANGE = RE_NUM + ":+" + RE_NUM + "(:+" + RE_NUM + ")?"; // regex for range ('min:max[:step]')
     public static final String RE_LETTERS = "[a-zA-Z]+";
     public static final String RE_OPERANDS = "[()*/+\\-]";
-    private static final String REGEX = RE_RANGE + "|" + RE_LETTERS + "|" + RE_OPERANDS + "|" + RE_UNUM;
+    private static final String REGEX = RE_LETTERS + "|" + RE_OPERANDS + "|" + RE_UNUM;
 
     public static List<Lexeme> parse(final String[] arg) throws UnhandledLexemeException {
         String input = "";

@@ -12,6 +12,23 @@ public class Lexeme {
         this.value = value;
     }
 
+    public Lexeme(final String value) throws UnhandledLexemeException {
+        this.type = LexemeClassifier.classify(value);
+        this.value = value;
+    }
+
+    public double getRealValue() throws Exception {
+        switch (type) {
+            case MATH_CONSTANT:
+                return MathConstant.valueOf(value).getValue();
+            case NUMBER:
+                return Double.parseDouble(value);
+            default:
+                throw new Exception("unexpected error");
+        }
+
+    }
+
     public LexemeType getType() {
         return type;
     }

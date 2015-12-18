@@ -14,7 +14,7 @@ public class ParserTest {
             " ",
             "xregergerg ergerg egr",
             "x",
-            "x 12:3:-2",
+            "x / 124.4 - 23",
             "(5 + x) / x",
             "x - 4.32 + 5 * (-1.9 + x)",
             "x + (x + 10.324)*x/((x) - 2.5)",

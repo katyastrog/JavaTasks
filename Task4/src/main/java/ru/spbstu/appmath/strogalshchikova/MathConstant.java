@@ -9,4 +9,8 @@ public enum MathConstant {
     MathConstant(final double value) {
         this.value = value;
     }
+
+    public double getValue() {
+        return value;
+    }
 }
