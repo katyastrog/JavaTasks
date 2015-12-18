@@ -16,7 +16,7 @@ public class Parser {
     public static final String RE_OPERANDS = "[()*/+\\-]";
     private static final String REGEX = RE_RANGE + "|" + RE_LETTERS + "|" + RE_OPERANDS + "|" + RE_UNUM;
 
-    public static List<String> parse(final String[] arg) throws UnhandledLexemeException {
+    public static List<Lexeme> parse(final String[] arg) throws UnhandledLexemeException {
         String input = "";
 
         for (String s : arg) {
@@ -26,18 +26,19 @@ public class Parser {
         return parse(input);
     }
 
-    public static List<String> parse(final String input) throws UnhandledLexemeException {
-        List<String> parsedInput = new ArrayList<>();
-        String trimmedInput = input.trim();
-        Matcher matcher = Pattern.compile(REGEX).matcher(trimmedInput);
+    public static List<Lexeme> parse(final String input) throws UnhandledLexemeException {
+        List<Lexeme> parsedInput = new ArrayList<>();
+        final String trimmedInput = input.trim();
+        final Matcher matcher = Pattern.compile(REGEX).matcher(trimmedInput);
 
         while (matcher.find()) {
-            parsedInput.add(trimmedInput.substring(matcher.start(), matcher.end()));
+            final String s = trimmedInput.substring(matcher.start(), matcher.end());
+            parsedInput.add(new Lexeme(LexemeClassifier.classify(s), s));
         }
-        //
+
         int totalLength = 0;
-        for (String s : parsedInput) {
-            totalLength += s.length();
+        for (Lexeme lexeme : parsedInput) {
+            totalLength += lexeme.get();
         }
 
         if (totalLength != trimmedInput.replaceAll("\\s", "").length())

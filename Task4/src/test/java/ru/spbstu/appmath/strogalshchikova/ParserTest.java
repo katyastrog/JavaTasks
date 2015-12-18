@@ -40,15 +40,22 @@ public class ParserTest {
     @Test
     public void testParse() throws Exception {
         for (String data : correctInput) {
-            List<String> parsedInput = Parser.parse(data);
-
+            List<Lexeme> parsedInput = Parser.parse(data);
             Assert.assertNotNull(parsedInput);
 
+            int inputLen = data.replaceAll("\\s", "").length();
+            int parsedInputLen = 0;
 
-            for (String s : parsedInput) {
-                System.out.print("'" + s + "' ");
+            for (Lexeme lexeme : parsedInput) {
+                parsedInputLen += lexeme.getLen();
             }
-            System.out.println();
+
+            Assert.assertEquals(inputLen, parsedInputLen);
+
+//            for (Lexeme lexeme : parsedInput) {
+//                System.out.print("'" + lexeme + "' ");
+//            }
+//            System.out.println();
         }
 
         for (String data : incorrectInput) {
