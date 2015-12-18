@@ -1,12 +1,12 @@
 package ru.spbstu.appmath.strogalshchikova;
 
-public enum Constant {
+public enum MathConstant {
     PI(Math.PI),
     E(Math.E);
 
     private final double value;
 
-    Constant(final double value) {
+    MathConstant(final double value) {
         this.value = value;
     }
 }

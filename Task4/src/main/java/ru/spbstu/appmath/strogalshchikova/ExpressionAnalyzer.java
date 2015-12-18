@@ -7,134 +7,88 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ExpressionAnalyzer {
-    public static List<String> analyze(final List<String> input) throws ParenthesesBalanceException, UnhandledLexemeException, WrongSyntaxException, TooManyVariablesException, WrongRangeException {
-        List<String> result = new ArrayList<>();
-        Set<String> variables = new HashSet<>();
-        LexemeType lexemeType;
+    public static List<Lexeme> analyze(final List<Lexeme> input) throws ParenthesesBalanceException, UnhandledLexemeException, WrongSyntaxException, TooManyVariablesException, WrongRangeException {
+        Set<Lexeme> variablesSet = new HashSet<>();
         int parentheses = 0;
         boolean isVarExpected = false;
-
+        final int last = input.size() - 1;
 
         // when only lexeme exists
-        if (input.size() == 1) {
-            if (isNumber(input.get(0)) || isConstant(input.get(0))) {
-                result.add(input.get(0));
-                return result;
-            } else {
-                throw new WrongSyntaxException();
-            }
+        if (input.size() == 1 && input.get(0).isReal()) {
+            return input.subList(0, last);
+        } else if (input.size() == 1) {
+            throw new WrongSyntaxException();
         }
 
         // check if variable is expected
-        int last = input.size() - 1;
-        if (input.size() > 1 && (isRange(input.get(last)) ||
-                ((isNumber(input.get(last)) || isConstant(input.get(last))) && !isOperand(input.get(last - 1))))) {
+        if (input.get(last).isRange() || (input.get(last).isReal() && !input.get(last - 1).isOperand())) {
             isVarExpected = true;
-            if (isRange(input.get(last))) {
-                analyzeRange(input.get(last));
-            }
+            // checks is range syntax correct
+            analyzeRangeSyntax(input.get(last));
         }
 
-        for (int curr = 0; curr < input.size() - 1; curr++) {
-            int next = curr + 1;
-            if (parentheses < 0)
-                throw new ParenthesesBalanceException();
-            if (variables.size() > 1)
-                throw new TooManyVariablesException();
+        for (int curr = 0; curr < last; curr++) {
+            final int next = curr + 1;
 
-            switch (LexemeClassifier.classify(input.get(curr))) {
+            switch (input.get(curr).getType()) {
                 case LEFT_BRACKET:
-                    if (isNumber(input.get(next)) || isConstant(input.get(next)) || (isVar(input.get(next)) && isVarExpected) || input.get(next).equals("("))
-                        result.add(input.get(curr));
-                    else
+                    if (!input.get(next).isReal() && !(isVarExpected && input.get(next).isVar()) && !input.get(next).isLeftBracket())
                         throw new WrongSyntaxException();
                     parentheses += 1;
                     break;
                 case RIGHT_BRACKET:
-                    if (isOperand(input.get(next)) || input.get(next).equals(")") || (isVarExpected && last == next))
-                        result.add(input.get(curr));
-                    else
+                    if (!input.get(next).isOperand() && !input.get(next).isRightBracket() && !(isVarExpected && last == next))
                         throw new WrongSyntaxException();
                     parentheses -= 1;
                     break;
                 case NUMBER:
-                case CONSTANT:
-                    if (isOperand(input.get(next)) || input.get(next).equals(")") || (isVarExpected && last == next))
-                        result.add(input.get(curr));
-                    else
+                case MATH_CONSTANT:
+                    if (!input.get(next).isOperand() && !input.get(next).isRightBracket() && !(isVarExpected && last == next))
                         throw new WrongSyntaxException();
                     break;
                 case OPERAND:
-                    if (isNumber(input.get(next)) || isConstant(input.get(next)) || isVar(input.get(next)) || input.get(next).equals("("))
-                        result.add(input.get(curr));
-                    else
+                    if (!input.get(next).isReal() && !(isVarExpected && input.get(next).isVar()) && !input.get(next).isLeftBracket())
                         throw new WrongSyntaxException();
                     break;
                 case VARIABLE:
-                    if (!isVarExpected || !(isOperand(input.get(next)) || input.get(next).equals(")") || last == next)) {
+                    if (!isVarExpected || (!input.get(next).isOperand() && !input.get(next).isRightBracket() && last != next))
                         throw new WrongSyntaxException();
-                    } else if (!variables.isEmpty() && !variables.contains(input.get(curr))) {
+                    if (!variablesSet.isEmpty() && !variablesSet.contains(input.get(curr)))
                         throw new TooManyVariablesException();
-                    } else {
-                        result.add(input.get(curr));
-                        variables.add(input.get(curr));
-                    }
+                    if (variablesSet.isEmpty())
+                        variablesSet.add(input.get(curr));
                     break;
                 case RANGE:
                     throw new WrongSyntaxException(); // range should be the last element within input
             }
+
+            if (parentheses < 0)
+                throw new ParenthesesBalanceException();
+
         }
 
-        result.add(input.get(last));
-
-        if (input.get(last).equals("("))
+        if (input.get(last).isLeftBracket())
             parentheses++;
-        else if (input.get(last).equals(")"))
+        else if (input.get(last).isRightBracket())
             parentheses--;
-
 
         if (parentheses != 0)
             throw new ParenthesesBalanceException();
-        if (variables.size() != 1 && isVarExpected)
-            throw new WrongSyntaxException();
 
-        return result;
+        return input.subList(0, last);
     }
 
-    private static void analyzeRange(final String range) throws WrongRangeException {
-        Matcher matcher = Pattern.compile(Parser.RE_NUM).matcher(range);
-        ArrayList<Double> d = new ArrayList<>();
-
+    private static void analyzeRangeSyntax(final Lexeme range) throws WrongRangeException {
+        Matcher matcher = Pattern.compile(Parser.RE_NUM).matcher(range.getValue());
+        Double d[] = {null};
+        int i = 0;
         while (matcher.find()) {
-            d.add(Double.valueOf(range.substring(matcher.start(), matcher.end())));
+            d[i] = (Double.valueOf(range.getValue().substring(matcher.start(), matcher.end())));
+            ++i;
         }
 
-        if (d.size() == 2 && d.get(0) > d.get(1))
+        if ((i == 2 && d[0] > d[1]) ||
+                (i == 3 && Math.signum(d[1] - d[0]) != Math.signum(d[2])))
             throw new WrongRangeException();
-        if (d.size() == 3) {
-            if (Math.signum(d.get(1) - d.get(0)) != Math.signum(d.get(2)))
-                throw new WrongRangeException();
-        }
     }
-
-    private static boolean isNumber(final String lexeme) throws UnhandledLexemeException {
-        return (LexemeClassifier.classify(lexeme) == LexemeType.NUMBER);
-    }
-
-    private static boolean isConstant(final String lexeme) throws UnhandledLexemeException {
-        return (LexemeClassifier.classify(lexeme) == LexemeType.CONSTANT);
-    }
-
-    private static boolean isOperand(final String lexeme) throws UnhandledLexemeException {
-        return (LexemeClassifier.classify(lexeme) == LexemeType.OPERAND);
-    }
-
-    private static boolean isRange(final String lexeme) throws UnhandledLexemeException {
-        return (LexemeClassifier.classify(lexeme) == LexemeType.RANGE);
-    }
-
-    private static boolean isVar(final String lexeme) throws UnhandledLexemeException {
-        return (LexemeClassifier.classify(lexeme) == LexemeType.VARIABLE);
-    }
-
 }

@@ -20,7 +20,7 @@ public class LexemeClassifier {
             return LexemeType.RIGHT_BRACKET;
         } else if (lexeme.matches(Parser.RE_LETTERS)) { // variables and constants
             if (isConstant(lexeme))
-                return LexemeType.CONSTANT;
+                return LexemeType.MATH_CONSTANT;
             else
                 return LexemeType.VARIABLE;
         } else if (lexeme.matches(Parser.RE_RANGE)) { // variable range
@@ -31,8 +31,8 @@ public class LexemeClassifier {
     }
 
     private static boolean isConstant(final String lexeme) {
-        for (Constant constant : Constant.values()) {
-            if (constant.name().equals(lexeme)) {
+        for (MathConstant mathConstant : MathConstant.values()) {
+            if (mathConstant.name().equals(lexeme)) {
                 return true;
             }
         }

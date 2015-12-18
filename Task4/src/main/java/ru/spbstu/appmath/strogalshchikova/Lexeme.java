@@ -1,6 +1,8 @@
 package ru.spbstu.appmath.strogalshchikova;
 
 
+import ru.spbstu.appmath.strogalshchikova.exceptions.UnhandledLexemeException;
+
 public class Lexeme {
     private final LexemeType type;
     private final String value;
@@ -25,5 +27,37 @@ public class Lexeme {
     @Override
     public String toString() {
         return getValue();
+    }
+
+    public boolean isNumber() {
+        return (this.type == LexemeType.NUMBER);
+    }
+
+    public boolean isLeftBracket() {
+        return (this.type == LexemeType.LEFT_BRACKET);
+    }
+
+    public boolean isRightBracket() {
+        return (this.type == LexemeType.RIGHT_BRACKET);
+    }
+
+    public boolean isConstant() {
+        return (this.type == LexemeType.MATH_CONSTANT);
+    }
+
+    public boolean isReal() {
+        return (isNumber() || isConstant());
+    }
+
+    public boolean isOperand() {
+        return (this.type == LexemeType.OPERAND);
+    }
+
+    public boolean isRange() {
+        return (this.type == LexemeType.RANGE);
+    }
+
+    public boolean isVar() {
+        return (this.type == LexemeType.VARIABLE);
     }
 }
