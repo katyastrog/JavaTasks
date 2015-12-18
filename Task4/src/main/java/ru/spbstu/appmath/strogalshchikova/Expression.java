@@ -10,7 +10,7 @@ public class Expression {
     private final List<Lexeme> expression;
     private final boolean isVarExpected;
 
-    public Expression(final String input) throws UnhandledLexemeException, WrongSyntaxException, ParenthesesBalanceException, TooManyVariablesException {
+    public Expression(final String input) throws UnhandledLexemeException, WrongSyntaxException, ParenthesesBalanceException, WrongRangeException, TooManyVariablesException {
         expression = Parser.parse(input);
         isVarExpected = Analyzer.analyze(expression);
     }
