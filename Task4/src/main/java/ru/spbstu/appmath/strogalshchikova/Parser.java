@@ -36,14 +36,6 @@ public class Parser {
             parsedInput.add(new Lexeme(LexemeClassifier.classify(s), s));
         }
 
-        int totalLength = 0;
-        for (Lexeme lexeme : parsedInput) {
-            totalLength += lexeme.get();
-        }
-
-        if (totalLength != trimmedInput.replaceAll("\\s", "").length())
-            throw new UnhandledLexemeException();
-
         return parsedInput;
     }
 }
