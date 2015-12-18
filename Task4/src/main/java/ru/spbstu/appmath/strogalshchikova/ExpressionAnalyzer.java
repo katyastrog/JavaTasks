@@ -24,7 +24,7 @@ public class ExpressionAnalyzer {
         if (input.get(last).isRange() || (input.get(last).isReal() && !input.get(last - 1).isOperand())) {
             isVarExpected = true;
             // checks is range syntax correct
-            analyzeRangeSyntax(input.get(last));
+            analyzeRange(input.get(last));
         }
 
         for (int curr = 0; curr < last; curr++) {
@@ -78,8 +78,8 @@ public class ExpressionAnalyzer {
         return input.subList(0, last);
     }
 
-    private static void analyzeRangeSyntax(final Lexeme range) throws WrongRangeException {
-        Matcher matcher = Pattern.compile(Parser.RE_NUM).matcher(range.getValue());
+    private static void analyzeRange(final Lexeme range) throws WrongRangeException {
+        final Matcher matcher = Pattern.compile(Parser.RE_NUM).matcher(range.getValue());
         Double d[] = {null};
         int i = 0;
         while (matcher.find()) {
