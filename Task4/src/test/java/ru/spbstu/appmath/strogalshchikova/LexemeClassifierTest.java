@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import ru.spbstu.appmath.strogalshchikova.exceptions.UnhandledLexemeException;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,10 +31,21 @@ public class LexemeClassifierTest {
             {"1.0:3:-21", LexemeType.RANGE},
             {"1:3.10131", LexemeType.RANGE},
             {")", LexemeType.RIGHT_BRACKET},
-            {"(", LexemeType.LEFT_BRACKET}
+            {"(", LexemeType.LEFT_BRACKET},
+            {"x:qe", null},
+            {")(", null},
+            {"1ed", null},
+            {"P i", null},
+            {"1)", null},
+            {"#@$%", null},
+            {"--", null},
+            {"+1", null},
+            {"/13", null}
     };
-    private String input;
-    private LexemeType type;
+
+    private final String input;
+    private final LexemeType type;
+
     public LexemeClassifierTest(String input, LexemeType type) {
         this.input = input;
         this.type = type;
@@ -45,7 +57,17 @@ public class LexemeClassifierTest {
     }
 
     @Test
-    public void testClassify() throws Exception {
-        Assert.assertEquals(LexemeClassifier.classify(input), type);
+    public void testClassifyCorrectly() throws Exception {
+        if (type != null)
+            Assert.assertEquals(LexemeClassifier.classify(input), type);
     }
+
+    @Test(expected = UnhandledLexemeException.class)
+    public void testClassifyIncorrectly() throws Exception {
+        if (type == null)
+            LexemeClassifier.classify(input);
+        else
+            throw new UnhandledLexemeException("fake");
+    }
+
 }
