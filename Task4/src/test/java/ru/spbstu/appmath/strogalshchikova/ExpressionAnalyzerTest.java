@@ -41,20 +41,16 @@ public class ExpressionAnalyzerTest {
     public void testAnalyze() throws Exception {
         for (String data : correctInput) {
             System.out.print(data + " -- ");
-            List<String> parsedInput = Parser.parse(data);
-            List<String> analyzedInput = ExpressionAnalyzer.analyze(parsedInput);
+            List<Lexeme> parsedInput = Parser.parse(data);
+            List<Lexeme> analyzedInput = ExpressionAnalyzer.analyze(parsedInput);
 
-            for (String s : parsedInput) {
-                System.out.print("'" + s + "' ");
+            Assert.assertEquals(parsedInput, analyzedInput);
+
+            for (Lexeme l : parsedInput) {
+                System.out.print("'" + l + "' ");
             }
             System.out.println();
 
-            for (String s : analyzedInput) {
-                System.out.print("'" + s + "' ");
-            }
-            System.out.println();
-
-            Assert.assertEquals(parsedInput.size(), analyzedInput.size());
         }
 
         for (String data : incorrectInput) {
