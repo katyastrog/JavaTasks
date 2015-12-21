@@ -11,8 +11,13 @@ public class Expression {
     private final boolean isVarExpected;
 
     public Expression(final String input) throws UnhandledLexemeException, WrongSyntaxException, ParenthesesBalanceException, WrongRangeException, TooManyVariablesException {
-        expression = Parser.parse(input);
-        isVarExpected = Analyzer.analyze(expression);
+        this.expression = Parser.parse(input);
+        this.isVarExpected = Analyzer.analyze(expression);
+    }
+
+    public Expression(final List<Lexeme> expression) throws WrongSyntaxException, ParenthesesBalanceException, UnhandledLexemeException, TooManyVariablesException {
+        this.expression = expression;
+        this.isVarExpected = Analyzer.analyze(this.expression);
     }
 
     public List<Lexeme> getExpression() {
@@ -21,5 +26,16 @@ public class Expression {
 
     public boolean isVarExpected() {
         return isVarExpected;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+
+        for (Lexeme l : expression) {
+            result.append(l.getValue());
+        }
+
+        return result.toString();
     }
 }

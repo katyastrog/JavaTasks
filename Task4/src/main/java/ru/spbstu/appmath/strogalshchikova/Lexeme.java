@@ -77,4 +77,26 @@ public class Lexeme {
     public boolean isVar() {
         return (this.type == LexemeType.VARIABLE);
     }
+
+    public int handleIfBracket() {
+        if (isLeftBracket())
+            return 1;
+        else if (isRightBracket())
+            return -1;
+        else
+            return 0;
+    }
+
+    public int getPriorityIfOperand() {
+        switch (value) {
+            case "-":
+            case "+":
+                return 1;
+            case "*":
+            case "/":
+                return 2;
+            default:
+                return 0;
+        }
+    }
 }

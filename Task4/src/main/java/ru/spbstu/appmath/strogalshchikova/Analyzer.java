@@ -20,12 +20,14 @@ public class Analyzer {
         final int last = input.size() - 1;
 
         // when only lexeme exists
-        if (input.size() == 1 && input.get(0).isReal())
-            return false;
-        else if (input.size() == 1 && input.get(0).isVar())
-            return true;
-        else if (input.size() == 1)
-            throw new WrongSyntaxException();
+        if (input.size() == 1) {
+            if (input.get(0).isReal())
+                return false;
+            else if (input.get(0).isVar())
+                return true;
+            else
+                throw new WrongSyntaxException();
+        }
 
         for (int curr = 0; curr < last; curr++) {
             final int next = curr + 1;
@@ -67,12 +69,7 @@ public class Analyzer {
 
         }
 
-        if (input.get(last).isLeftBracket())
-            parentheses++;
-        else if (input.get(last).isRightBracket())
-            parentheses--;
-
-        if (parentheses != 0)
+        if (parentheses + input.get(last).handleIfBracket() != 0)
             throw new ParenthesesBalanceException();
 
         return !variablesSet.isEmpty();
