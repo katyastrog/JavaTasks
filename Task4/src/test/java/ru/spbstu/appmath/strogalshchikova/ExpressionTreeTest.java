@@ -42,4 +42,9 @@ public class ExpressionTreeTest {
         System.out.println(input + " == " + expectedExp);
         Assert.assertTrue(simplifiedExp.toString().equals(expectedExp.toString()));
     }
+
+    @Test
+    public void testCalculate() throws Exception {
+
+    }
 }

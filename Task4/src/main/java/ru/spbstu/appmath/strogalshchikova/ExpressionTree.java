@@ -115,8 +115,8 @@ public class ExpressionTree {
         @Override
         public double value() throws VariableValueExpectationException {
             final double m1 = lChild.value();
-            final double m2 =rChild.value();
-                    //System.out.println(m1 + " * " + m2 + " = " + (m1 * m2));
+            final double m2 = rChild.value();
+            //System.out.println(m1 + " * " + m2 + " = " + (m1 * m2));
 
             return m1 * m2;
         }
@@ -155,8 +155,8 @@ public class ExpressionTree {
 
         @Override
         public double value() throws VariableValueExpectationException {
-            final double s1 =lChild.value();
-            final double s2 =rChild.value();
+            final double s1 = lChild.value();
+            final double s2 = rChild.value();
             //System.out.println(s1 + " + " + s2 + " = " + (s1 + s2));
 
             return s1 + s2;
