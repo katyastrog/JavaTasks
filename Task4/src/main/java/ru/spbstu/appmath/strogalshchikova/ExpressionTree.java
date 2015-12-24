@@ -8,47 +8,156 @@ import java.util.List;
 
 public class ExpressionTree {
 
-    public ExpressionTree(final List<Lexeme> expression) {
-        buildTree(simplify(expression));
+    private final Function root;
+    protected Double variableValue = null;
+
+    public ExpressionTree(final List<Lexeme> expression) throws Exception {
+        root = buildNode(expression);
     }
 
-    public static List<Lexeme> simplify(final List<Lexeme> inputExpression) {
-        List<Lexeme> exp = inputExpression.subList(0, inputExpression.size());
+    public double calculate() throws DivisionByZeroException, VariableValueExpectationException {
+        variableValue = null;
+        return root.value();
+    }
 
-        for (int i = 0; i < exp.size(); i++) { // iterates by the element before the last element
-            int last = exp.size() - 1; // size can be changed
-            if (exp.get(i).isLeftBracket()) {
-                int balance = 0;
+    public double calculate(final double realValue) throws DivisionByZeroException, VariableValueExpectationException {
+        variableValue = realValue;
+        return root.value();
+    }
 
-                for (int j = i + 1; j < exp.size(); j++) {
-                    balance += exp.get(j).handleIfBracket(); // consider inner parentheses constructions
-                    if (balance == -1) { // balance == -1 when j arrives appropriate right bracket
-                        if (((i == 0 || exp.get(i - 1).isLeftBracket() || exp.get(i - 1).getValue().equals("+")) && // left elements allows to remove brackets
-                                (j == last || exp.get(j + 1).isRightBracket() || exp.get(j + 1).getPriorityIfOperand() == 1)) || // right elements allows to remove brackets
-                                (j - i == 2)) { // only lexeme is between brackets
-                            exp.remove(j); // remove right bracket
-                            exp.remove(i); // remove left bracket
-                            i--; // i will be incremented at the next iteration
-                        }
-                        break;
-                    }
-                }
+    private Function buildNode(final List<Lexeme> expression) throws Exception {
+        final List<Lexeme> exp = ExpressionUtilities.simplify(expression);
+        Function node = null;
+        int fracture;
+
+        if (exp.size() == 1 && exp.get(0).isReal()) {
+            switch (exp.get(0).getType()) {
+                case VARIABLE:
+                    node = new Variable();
+                    break;
+                case NUMBER:
+                case MATH_CONSTANT:
+                    node = new Constant(exp.get(0).getRealValue());
+                    break;
+            }
+        } else {
+            fracture = ExpressionUtilities.findFracture(exp);
+
+            switch (exp.get(fracture).getValue()) {
+                case "+":
+                    node = new SumOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size() - 1));
+                    break;
+                case "-":
+                    node = new SubOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size() - 1));
+                    break;
+                case "*":
+                    node = new MultOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size() - 1));
+                    break;
+                case "/":
+                    node = new DivOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size() - 1));
+                    break;
+                default:
+                    throw new Exception("Something goes wrong!");
             }
         }
 
-        return exp;
+        return node;
     }
 
-    public String calculate() throws DivisionByZeroException, VariableValueExpectationException {
-        return null;
+    private interface Function {
+        double value() throws VariableValueExpectationException;
     }
 
-    public String calculate(final double realValue) throws DivisionByZeroException {
-        return null;
+    // division
+    protected class DivOperation implements Function {
+        private final Function lChild;
+        private final Function rChild;
+
+        public DivOperation(final List<Lexeme> left, final List<Lexeme> right) throws Exception {
+            lChild = buildNode(left);
+            rChild = buildNode(right);
+        }
+
+        @Override
+        public double value() throws VariableValueExpectationException {
+            final double divisor = rChild.value();
+
+            if (Double.compare(divisor, 0.0) == 0) {
+                throw new DivisionByZeroException();
+            } else {
+                return lChild.value() / divisor;
+            }
+        }
     }
 
-    private void buildTree(final List<Lexeme> expression) {
+    // multiplication
+    protected class MultOperation implements Function {
+        private final Function lChild;
+        private final Function rChild;
 
+        public MultOperation(final List<Lexeme> left, final List<Lexeme> right) throws Exception {
+            lChild = buildNode(left);
+            rChild = buildNode(right);
+        }
+
+        @Override
+        public double value() throws VariableValueExpectationException {
+            return lChild.value() * rChild.value();
+        }
     }
 
+    // subtraction
+    protected class SubOperation implements Function {
+
+        private final Function lChild;
+        private final Function rChild;
+
+        public SubOperation(final List<Lexeme> left, final List<Lexeme> right) throws Exception {
+            lChild = buildNode(left);
+            rChild = buildNode(right);
+        }
+
+        @Override
+        public double value() throws VariableValueExpectationException {
+            return lChild.value() - rChild.value();
+        }
+    }
+
+    protected class SumOperation implements Function {
+        private final Function lChild;
+        private final Function rChild;
+
+        public SumOperation(final List<Lexeme> left, final List<Lexeme> right) throws Exception {
+            lChild = buildNode(left);
+            rChild = buildNode(right);
+        }
+
+        @Override
+        public double value() throws VariableValueExpectationException {
+            return lChild.value() + rChild.value();
+        }
+    }
+
+    protected class Variable implements Function {
+        @Override
+        public double value() throws VariableValueExpectationException {
+            if (variableValue == null)
+                throw new VariableValueExpectationException();
+            else
+                return variableValue;
+        }
+    }
+
+    protected class Constant implements Function {
+        private final double value;
+
+        public Constant(final double realValue) {
+            this.value = realValue;
+        }
+
+        @Override
+        public double value() {
+            return this.value;
+        }
+    }
 }
