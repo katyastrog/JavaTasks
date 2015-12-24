@@ -56,7 +56,7 @@ public class Calculator {
                 break;
             case 1:
             case 2:
-                System.out.println("Calculating");
+                //System.out.println("Calculating");
                 answer = getAnswer(request);
                 break;
             case 3:
