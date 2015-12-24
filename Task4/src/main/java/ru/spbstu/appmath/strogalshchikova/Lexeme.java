@@ -91,10 +91,10 @@ public class Lexeme {
         switch (value) {
             case "-":
             case "+":
-                return 1;
+                return 2;
             case "*":
             case "/":
-                return 2;
+                return 1;
             default:
                 return 0;
         }
