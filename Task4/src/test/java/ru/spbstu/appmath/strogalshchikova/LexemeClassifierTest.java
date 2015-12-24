@@ -13,8 +13,6 @@ import java.util.Collection;
 public class LexemeClassifierTest {
 
     private final static Object[][] CORRECT_TEST_DATA = {
-            {"E", LexemeType.MATH_CONSTANT},
-            {"PI", LexemeType.MATH_CONSTANT},
             {"1.2324", LexemeType.NUMBER},
             {"0", LexemeType.NUMBER},
             {"12324", LexemeType.NUMBER},

@@ -11,20 +11,10 @@ public class Parser {
 
     public static final String RE_UNUM = "(\\d+(\\.\\d+)?)"; // regex for unsigned numeric
     public static final String RE_NUM = "(\\-?" + RE_UNUM + ")"; // regex for signed numeric
-    public static final String RE_RANGE = RE_NUM + ":+" + RE_NUM + "(:+" + RE_NUM + ")?"; // regex for range ('min:max[:step]')
+    public static final String RE_RANGE = RE_NUM + ":?" + RE_NUM + "(:?" + RE_NUM + ")?"; // regex for range ('min:max[:step]')
     public static final String RE_LETTERS = "[a-zA-Z]+";
     public static final String RE_OPERANDS = "[()*/+\\-]";
     private static final String REGEX = RE_LETTERS + "|" + RE_OPERANDS + "|" + RE_UNUM;
-
-    public static List<Lexeme> parse(final String[] arg) throws UnhandledLexemeException {
-        String input = "";
-
-        for (String s : arg) {
-            input += s;
-        }
-
-        return parse(input);
-    }
 
     public static List<Lexeme> parse(final String input) throws UnhandledLexemeException {
         List<Lexeme> parsedInput = new ArrayList<>();

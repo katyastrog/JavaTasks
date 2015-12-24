@@ -19,10 +19,7 @@ public class LexemeClassifier {
         } else if (lexeme.equals(")")) { // right bracket
             return LexemeType.RIGHT_BRACKET;
         } else if (lexeme.matches(Parser.RE_LETTERS)) { // variables and constants
-            if (isConstant(lexeme))
-                return LexemeType.MATH_CONSTANT;
-            else
-                return LexemeType.VARIABLE;
+            return LexemeType.VARIABLE;
         } else if (lexeme.matches(Parser.RE_RANGE)) { // variable range
             return LexemeType.RANGE;
         } else {
@@ -30,13 +27,4 @@ public class LexemeClassifier {
         }
     }
 
-    private static boolean isConstant(final String lexeme) {
-        for (MathConstant mathConstant : MathConstant.values()) {
-            if (mathConstant.name().equals(lexeme)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

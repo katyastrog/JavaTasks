@@ -15,13 +15,13 @@ public class Analyzer {
     * returns true if variable expected
     */
     public static boolean analyze(final List<Lexeme> input) throws ParenthesesBalanceException, UnhandledLexemeException, WrongSyntaxException, TooManyVariablesException {
-        Set<String> variablesSet = new HashSet<>();
+        Set<String> variablesSet = new HashSet<>(2);
         int parentheses = 0;
         final int last = input.size() - 1;
 
         // when only lexeme exists
         if (input.size() == 1) {
-            if (input.get(0).isReal())
+            if (input.get(0).isNumber())
                 return false;
             else if (input.get(0).isVar())
                 return true;
@@ -34,7 +34,7 @@ public class Analyzer {
 
             switch (input.get(curr).getType()) {
                 case LEFT_BRACKET:
-                    if (!input.get(next).isReal() && !input.get(next).isVar() && !input.get(next).isLeftBracket())
+                    if (!input.get(next).isNumber() && !input.get(next).isVar() && !input.get(next).isLeftBracket())
                         throw new WrongSyntaxException();
                     parentheses += 1;
                     break;
@@ -44,12 +44,11 @@ public class Analyzer {
                     parentheses -= 1;
                     break;
                 case NUMBER:
-                case MATH_CONSTANT:
                     if (!input.get(next).isOperand() && !input.get(next).isRightBracket())
                         throw new WrongSyntaxException();
                     break;
                 case OPERAND:
-                    if (!input.get(next).isReal() && !input.get(next).isVar() && !input.get(next).isLeftBracket())
+                    if (!input.get(next).isNumber() && !input.get(next).isVar() && !input.get(next).isLeftBracket())
                         throw new WrongSyntaxException();
                     break;
                 case VARIABLE:
@@ -85,7 +84,7 @@ public class Analyzer {
         }
 
         if ((i == 2 && d[0] > d[1]) ||
-                (i == 3 && Math.signum(d[1] - d[0]) != Math.signum(d[2])))
+                (i == 3 && (Math.signum(d[1] - d[0]) != Math.signum(d[2]) || d[2].equals(0.0))))
             throw new WrongRangeException();
     }
 }

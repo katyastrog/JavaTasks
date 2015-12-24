@@ -19,8 +19,6 @@ public class Lexeme {
 
     public double getRealValue() throws Exception {
         switch (type) {
-            case MATH_CONSTANT:
-                return MathConstant.valueOf(value).getValue();
             case NUMBER:
                 return Double.parseDouble(value);
             default:
@@ -56,14 +54,6 @@ public class Lexeme {
 
     public boolean isRightBracket() {
         return (this.type == LexemeType.RIGHT_BRACKET);
-    }
-
-    public boolean isConstant() {
-        return (this.type == LexemeType.MATH_CONSTANT);
-    }
-
-    public boolean isReal() {
-        return (isNumber() || isConstant());
     }
 
     public boolean isOperand() {

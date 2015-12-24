@@ -22,7 +22,7 @@ public class Calculator {
                 case 2:
                     //System.out.println("calc switch case 2");
                     final Lexeme varValue = new Lexeme(input[1]);
-                if (!isVarExpected || !varValue.isReal()) {
+                if (!isVarExpected || !varValue.isNumber()) {
                     throw new WrongSyntaxException();
                 } else {
                     tree = new ExpressionTree(expression);

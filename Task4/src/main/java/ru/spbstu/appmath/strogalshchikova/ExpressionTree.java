@@ -35,7 +35,7 @@ public class ExpressionTree {
         Function node = null;
         int fracture;
 
-        if (exp.size() == 1 && exp.get(0).isReal()) {
+        if (exp.size() == 1 && (exp.get(0).isNumber() || exp.get(0).isVar())) {
             //System.out.print(exp.get(0).getValue() + " ");
 
             switch (exp.get(0).getType()) {
@@ -43,7 +43,6 @@ public class ExpressionTree {
                     node = new Variable();
                     break;
                 case NUMBER:
-                case MATH_CONSTANT:
                     node = new Constant(exp.get(0).getRealValue());
                     break;
             }
@@ -69,7 +68,7 @@ public class ExpressionTree {
                     throw new Exception("Something goes wrong!");
             }
         }
-//
+
         return node;
     }
 
