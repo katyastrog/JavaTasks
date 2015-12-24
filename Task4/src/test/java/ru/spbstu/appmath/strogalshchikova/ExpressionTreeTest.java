@@ -7,7 +7,6 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 
 @RunWith(Parameterized.class)
 public class ExpressionTreeTest {
@@ -37,7 +36,7 @@ public class ExpressionTreeTest {
 
     @Test
     public void testSimplify() throws Exception {
-        final Expression simplifiedExp = new Expression(ExpressionTree.simplify(Parser.parse(input)));
+        final Expression simplifiedExp = new Expression(ExpressionUtilities.simplify(Parser.parse(input)));
         final Expression expectedExp = new Expression(expected);
 
         System.out.println(input + " == " + expectedExp);
