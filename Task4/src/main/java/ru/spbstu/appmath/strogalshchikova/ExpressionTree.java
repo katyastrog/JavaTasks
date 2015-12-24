@@ -9,15 +9,20 @@ import java.util.List;
 public class ExpressionTree {
 
     private final Function root;
-    protected Double variableValue = null;
+    private final boolean isVarExpected;
+    private Double variableValue = null;
 
-    public ExpressionTree(final List<Lexeme> expression) throws Exception {
-        root = buildNode(expression);
+    public ExpressionTree(final Expression expression) throws Exception {
+        this.isVarExpected = expression.isVarExpected();
+        root = buildNode(expression.getExpression());
     }
 
     public double calculate() throws DivisionByZeroException, VariableValueExpectationException {
         variableValue = null;
-        return root.value();
+        if (isVarExpected)
+            throw new VariableValueExpectationException();
+        else
+            return root.value();
     }
 
     public double calculate(final double realValue) throws DivisionByZeroException, VariableValueExpectationException {
@@ -31,6 +36,8 @@ public class ExpressionTree {
         int fracture;
 
         if (exp.size() == 1 && exp.get(0).isReal()) {
+            //System.out.print(exp.get(0).getValue() + " ");
+
             switch (exp.get(0).getType()) {
                 case VARIABLE:
                     node = new Variable();
@@ -43,18 +50,20 @@ public class ExpressionTree {
         } else {
             fracture = ExpressionUtilities.findFracture(exp);
 
+            //System.out.print(exp.get(fracture).getValue() + " ");
+
             switch (exp.get(fracture).getValue()) {
                 case "+":
-                    node = new SumOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size() - 1));
+                    node = new SumOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size()));
                     break;
                 case "-":
-                    node = new SubOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size() - 1));
+                    node = new SubOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size()));
                     break;
                 case "*":
-                    node = new MultOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size() - 1));
+                    node = new MultOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size()));
                     break;
                 case "/":
-                    node = new DivOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size() - 1));
+                    node = new DivOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size()));
                     break;
                 default:
                     throw new Exception("Something goes wrong!");
@@ -80,12 +89,15 @@ public class ExpressionTree {
 
         @Override
         public double value() throws VariableValueExpectationException {
+            final double dividend = lChild.value();
             final double divisor = rChild.value();
+            //System.out.println(dividend + " / " + divisor + " = " + (dividend / divisor));
+
 
             if (Double.compare(divisor, 0.0) == 0) {
                 throw new DivisionByZeroException();
             } else {
-                return lChild.value() / divisor;
+                return dividend / divisor;
             }
         }
     }
@@ -102,7 +114,11 @@ public class ExpressionTree {
 
         @Override
         public double value() throws VariableValueExpectationException {
-            return lChild.value() * rChild.value();
+            final double m1 = lChild.value();
+            final double m2 =rChild.value();
+                    //System.out.println(m1 + " * " + m2 + " = " + (m1 * m2));
+
+            return m1 * m2;
         }
     }
 
@@ -119,7 +135,12 @@ public class ExpressionTree {
 
         @Override
         public double value() throws VariableValueExpectationException {
-            return lChild.value() - rChild.value();
+            final double minuend = lChild.value();
+            final double subtrahend = rChild.value();
+
+            //System.out.println(minuend + " - " + subtrahend + " = " + (minuend - subtrahend));
+
+            return minuend - subtrahend;
         }
     }
 
@@ -134,7 +155,11 @@ public class ExpressionTree {
 
         @Override
         public double value() throws VariableValueExpectationException {
-            return lChild.value() + rChild.value();
+            final double s1 =lChild.value();
+            final double s2 =rChild.value();
+            //System.out.println(s1 + " + " + s2 + " = " + (s1 + s2));
+
+            return s1 + s2;
         }
     }
 

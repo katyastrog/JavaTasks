@@ -1,11 +1,15 @@
 package ru.spbstu.appmath.strogalshchikova;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExpressionUtilities {
 
     public static List<Lexeme> simplify(final List<Lexeme> inputExpression) {
-        List<Lexeme> exp = inputExpression.subList(0, inputExpression.size());
+        if (inputExpression.size() == 1)
+            return inputExpression;
+
+        List<Lexeme> exp = new ArrayList<>(inputExpression.subList(0, inputExpression.size()));
 
         for (int i = 0; i < exp.size(); i++) { // iterates by the element before the last element
             int last = exp.size() - 1; // size can be changed
@@ -39,10 +43,10 @@ public class ExpressionUtilities {
             brackets += exp.get(i).handleIfBracket();
             if (brackets == 0) {
                 if (exp.get(i).isOperand()) {
-                    if (exp.get(i).getPriorityIfOperand() == 2 && fracture == -1) { // if
+                    if (exp.get(i).getPriorityIfOperand() == 1) {// && fracture == -1) { // wrong condition
                         fracture = i;
                     }
-                    if (exp.get(i).getPriorityIfOperand() == 1) {
+                    if (exp.get(i).getPriorityIfOperand() == 2) {
                         fracture = i;
                         break;
                     }
