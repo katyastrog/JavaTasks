@@ -92,6 +92,10 @@ public class Expression {
 
         if (!input.get(last).isNumber() && !input.get(last).isVar() && !input.get(last).isRightBracket())
             throw new WrongSyntaxException();
+
+        if (input.get(last).isVar() && !variablesSet.isEmpty() && !variablesSet.contains(input.get(last).toString())) {
+            throw new TooManyVariablesException();
+        }
     }
 
     public boolean isVarExpected() {

@@ -1,13 +1,16 @@
 package ru.spbstu.appmath.strogalshchikova;
 
 import ru.spbstu.appmath.strogalshchikova.exceptions.DivisionByZeroException;
-import ru.spbstu.appmath.strogalshchikova.exceptions.VariableValueExpectationException;
 import ru.spbstu.appmath.strogalshchikova.exceptions.WrongRangeException;
 import ru.spbstu.appmath.strogalshchikova.exceptions.WrongSyntaxException;
 
-import java.io.*;
-import java.text.Format;
-import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -39,6 +42,22 @@ public class FileHandler {
         if ((i == 2 && d[0] > d[1]) ||
                 (i == 3 && (Math.signum(d[1] - d[0]) != Math.signum(d[2]) || d[2].equals(0.0))))
             throw new WrongRangeException();
+    }
+
+    public static void main(String[] args) throws WrongRangeException, WrongSyntaxException, IOException {
+        final String INPUT_FILE = "./src/resources/input.txt";
+        final String OUTPUT_FILE = "./src/resources/output.txt";
+        final String RANGE = "-4:8";
+
+        final String[] input = new String[]{INPUT_FILE, OUTPUT_FILE, RANGE};
+
+//        System.out.println(input[0]);
+//        System.out.println(input[1]);
+//        System.out.println(input[2]);
+
+        final FileHandler handler = new FileHandler(input);
+        handler.run();
+
     }
 
     public void run() throws IOException {
@@ -80,14 +99,14 @@ public class FileHandler {
             results[0][j] = exp.toString();
             for (int i = 1; i < n; i++) {
                 try {
-                    results[i][j] = String.valueOf(exp.calculate(range.getMin() + range.getStep() * (double)(i-1)));
+                    results[i][j] = String.valueOf(exp.calculate(range.getMin() + range.getStep() * (double) (i - 1)));
                 } catch (DivisionByZeroException e) {
                     results[i][j] = "Division by zero";
                 }
             }
         }
 
-        final int[] maxLen= new int[n];
+        final int[] maxLen = new int[n];
         for (int i = 0; i < expressions.size(); i++) {
             maxLen[i] = 0;
             for (int j = 0; j < n; j++) {
@@ -143,21 +162,5 @@ public class FileHandler {
         public double getStep() {
             return step;
         }
-    }
-
-    public static void main(String[] args) throws WrongRangeException, WrongSyntaxException, IOException {
-        final String INPUT_FILE = "./src/resources/input.txt";
-        final String OUTPUT_FILE = "./src/resources/output.txt";
-        final String RANGE = "-4:8";
-
-        final String[] input = new String[]{INPUT_FILE, OUTPUT_FILE, RANGE};
-
-//        System.out.println(input[0]);
-//        System.out.println(input[1]);
-//        System.out.println(input[2]);
-
-        final FileHandler handler = new FileHandler(input);
-        handler.run();
-
     }
 }
