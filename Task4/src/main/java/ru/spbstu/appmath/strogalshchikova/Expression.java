@@ -78,6 +78,8 @@ public class Expression {
                     break;
                 case RANGE:
                     throw new WrongSyntaxException(); // range shouldn't be within input
+                default:
+                    throw new UnhandledLexemeException();
             }
 
             if (parentheses < 0)
@@ -311,6 +313,16 @@ public class Expression {
                 final String s = trimmedInput.substring(matcher.start(), matcher.end());
                 parsedInput.add(new Lexeme(s));
             }
+
+            int len = 0;
+
+            for (Lexeme l : parsedInput) {
+                len += l.getLen();
+            }
+
+            if (len != input.replaceAll("[\\s]*", "").length())
+                throw new UnhandledLexemeException();
+
             return parsedInput;
         }
     }
