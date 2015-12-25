@@ -129,7 +129,7 @@ public class FileHandler {
             if (parsedRange.length == 3)
                 step = Double.valueOf(parsedRange[2]);
             else
-                step = 0.0;
+                step = 1.0;
         }
 
         public double getMin() {
@@ -148,7 +148,7 @@ public class FileHandler {
     public static void main(String[] args) throws WrongRangeException, WrongSyntaxException, IOException {
         final String INPUT_FILE = "./src/resources/input.txt";
         final String OUTPUT_FILE = "./src/resources/output.txt";
-        final String RANGE = "-4:8:0.5";
+        final String RANGE = "-4:8";
 
         final String[] input = new String[]{INPUT_FILE, OUTPUT_FILE, RANGE};
 
