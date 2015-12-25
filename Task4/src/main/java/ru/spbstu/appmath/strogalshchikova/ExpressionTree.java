@@ -12,7 +12,7 @@ public class ExpressionTree {
     private final boolean isVarExpected;
     private Double variableValue = null;
 
-    public ExpressionTree(final Expression expression) throws Exception {
+    public ExpressionTree(final Expression expression) {
         this.isVarExpected = expression.isVarExpected();
         root = buildNode(expression.getExpression());
     }
@@ -30,7 +30,7 @@ public class ExpressionTree {
         return root.value();
     }
 
-    private Function buildNode(final List<Lexeme> expression) throws Exception {
+    private Function buildNode(final List<Lexeme> expression) {
         final List<Lexeme> exp = ExpressionUtilities.simplify(expression);
         Function node = null;
         int fracture;
@@ -64,8 +64,6 @@ public class ExpressionTree {
                 case "/":
                     node = new DivOperation(exp.subList(0, fracture), exp.subList(fracture + 1, exp.size()));
                     break;
-                default:
-                    throw new Exception("Something goes wrong!");
             }
         }
 
@@ -81,7 +79,7 @@ public class ExpressionTree {
         private final Function lChild;
         private final Function rChild;
 
-        public DivOperation(final List<Lexeme> left, final List<Lexeme> right) throws Exception {
+        public DivOperation(final List<Lexeme> left, final List<Lexeme> right)  {
             lChild = buildNode(left);
             rChild = buildNode(right);
         }
@@ -106,7 +104,7 @@ public class ExpressionTree {
         private final Function lChild;
         private final Function rChild;
 
-        public MultOperation(final List<Lexeme> left, final List<Lexeme> right) throws Exception {
+        public MultOperation(final List<Lexeme> left, final List<Lexeme> right)  {
             lChild = buildNode(left);
             rChild = buildNode(right);
         }
@@ -127,7 +125,7 @@ public class ExpressionTree {
         private final Function lChild;
         private final Function rChild;
 
-        public SubOperation(final List<Lexeme> left, final List<Lexeme> right) throws Exception {
+        public SubOperation(final List<Lexeme> left, final List<Lexeme> right)  {
             lChild = buildNode(left);
             rChild = buildNode(right);
         }
@@ -147,7 +145,7 @@ public class ExpressionTree {
         private final Function lChild;
         private final Function rChild;
 
-        public SumOperation(final List<Lexeme> left, final List<Lexeme> right) throws Exception {
+        public SumOperation(final List<Lexeme> left, final List<Lexeme> right) {
             lChild = buildNode(left);
             rChild = buildNode(right);
         }

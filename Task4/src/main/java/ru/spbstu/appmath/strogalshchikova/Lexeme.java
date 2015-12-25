@@ -17,12 +17,12 @@ public class Lexeme {
         this.value = value;
     }
 
-    public double getRealValue() throws Exception {
+    public Double getRealValue() {
         switch (type) {
             case NUMBER:
                 return Double.parseDouble(value);
             default:
-                throw new Exception("unexpected error");
+                return null;
         }
 
     }

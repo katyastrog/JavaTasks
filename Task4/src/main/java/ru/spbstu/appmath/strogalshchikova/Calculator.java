@@ -3,32 +3,36 @@ package ru.spbstu.appmath.strogalshchikova;
 import ru.spbstu.appmath.strogalshchikova.exceptions.*;
 
 public class Calculator {
-    public static String getAnswer(final String[] input) {
-
-        try {
-            final Expression expression = new Expression(input[0]);
-            final boolean isVarExpected = expression.isVarExpected();
-            final ExpressionTree tree;
+    public static double calculate(final String[] input) throws WrongSyntaxException, ParenthesesBalanceException, UnhandledLexemeException, WrongRangeException, TooManyVariablesException, VariableValueExpectationException {
+        final Expression expression = new Expression(input[0]);
+        final boolean isVarExpected = expression.isVarExpected();
+        final ExpressionTree tree;
 
 
-            switch (input.length) {
-                case 1:
-                    if (isVarExpected) {
-                        throw new VariableValueExpectationException();
-                    } else {
-                        tree = new ExpressionTree(expression);
-                        return String.valueOf(tree.calculate());
-                    }
-                case 2:
-                    //System.out.println("calc switch case 2");
-                    final Lexeme varValue = new Lexeme(input[1]);
+        switch (input.length) {
+            case 1:
+                if (isVarExpected) {
+                    throw new VariableValueExpectationException();
+                } else {
+                    tree = new ExpressionTree(expression);
+                    return tree.calculate();
+                }
+            case 2:
+                final Lexeme varValue = new Lexeme(input[1]);
                 if (!isVarExpected || !varValue.isNumber()) {
                     throw new WrongSyntaxException();
                 } else {
                     tree = new ExpressionTree(expression);
-                    return String.valueOf(tree.calculate(varValue.getRealValue()));
+                    return tree.calculate(varValue.getRealValue());
                 }
-            }
+            default: throw new WrongSyntaxException();
+        }
+    }
+
+    public static String getAnswer(final String[] input) {
+
+        try {
+            calculate(input);
         } catch (UnhandledLexemeException e) {
             return "Unhandled lexeme.";
         } catch (WrongSyntaxException e) {
@@ -56,7 +60,6 @@ public class Calculator {
                 break;
             case 1:
             case 2:
-                //System.out.println("Calculating");
                 answer = getAnswer(request);
                 break;
             case 3:
