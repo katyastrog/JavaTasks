@@ -30,9 +30,8 @@ public class Calculator {
     }
 
     public static String getAnswer(final String[] input) {
-
         try {
-            calculate(input);
+            return String.valueOf(calculate(input));
         } catch (UnhandledLexemeException e) {
             return "Unhandled lexeme.";
         } catch (WrongSyntaxException e) {
@@ -45,11 +44,9 @@ public class Calculator {
             return "Division by zero.";
         } catch (VariableValueExpectationException e) {
             return "Variable value was expected.";
-        } catch (Exception e) {
-            return e.getMessage();
+        } catch (WrongRangeException e) {
+            return "Wrong range.";
         }
-
-        return null;
     }
 
     public static String response(final String[] request) {
