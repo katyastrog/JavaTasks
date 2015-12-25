@@ -81,7 +81,6 @@ public class Expression {
                 default:
                     throw new UnhandledLexemeException();
             }
-
             if (parentheses < 0)
                 throw new ParenthesesBalanceException();
 
@@ -89,6 +88,9 @@ public class Expression {
 
         if (parentheses + input.get(last).handleIfBracket() != 0)
             throw new ParenthesesBalanceException();
+
+        if (!input.get(last).isNumber() && !input.get(last).isVar() && !input.get(last).isRightBracket())
+            throw new WrongSyntaxException();
     }
 
     private static void analyzeRange(final Lexeme range) throws WrongRangeException {
