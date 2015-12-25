@@ -5,11 +5,11 @@ import java.util.List;
 
 public class ExpressionUtilities {
 
-    public static List<Lexeme> simplify(final List<Lexeme> inputExpression) {
+    public static List<Expression.Lexeme> simplify(final List<Expression.Lexeme> inputExpression) {
         if (inputExpression.size() == 1)
             return inputExpression;
 
-        List<Lexeme> exp = new ArrayList<>(inputExpression.subList(0, inputExpression.size()));
+        List<Expression.Lexeme> exp = new ArrayList<>(inputExpression.subList(0, inputExpression.size()));
 
         for (int i = 0; i < exp.size(); i++) { // iterates by the element before the last element
             int last = exp.size() - 1; // size can be changed
@@ -35,7 +35,7 @@ public class ExpressionUtilities {
         return exp;
     }
 
-    public static int findFracture(final List<Lexeme> exp) {
+    public static int findFracture(final List<Expression.Lexeme> exp) {
         int brackets = 0;
         int fracture = -1;
 
