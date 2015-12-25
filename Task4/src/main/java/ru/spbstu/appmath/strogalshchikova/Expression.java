@@ -17,7 +17,7 @@ public class Expression {
     private final boolean isVarExpected;
     private Double variableValue = null;
 
-    public Expression(final String input) throws WrongSyntaxException, WrongRangeException {
+    public Expression(final String input) throws WrongSyntaxException {
         this.lexemeList = Parser.parse(input);
         analyze(lexemeList);
         root = buildNode(this.lexemeList);
@@ -94,20 +94,6 @@ public class Expression {
             throw new WrongSyntaxException();
     }
 
-    private static void analyzeRange(final Lexeme range) throws WrongRangeException {
-        final Matcher matcher = Pattern.compile(Parser.RE_NUM).matcher(range.getValue());
-        Double d[] = {null, null, null};
-        int i = 0;
-        while (matcher.find()) {
-            d[i] = (Double.valueOf(range.getValue().substring(matcher.start(), matcher.end())));
-            ++i;
-        }
-
-        if ((i == 2 && d[0] > d[1]) ||
-                (i == 3 && (Math.signum(d[1] - d[0]) != Math.signum(d[2]) || d[2].equals(0.0))))
-            throw new WrongRangeException();
-    }
-
     public boolean isVarExpected() {
         return root.isVarExpected();
     }
@@ -131,7 +117,7 @@ public class Expression {
             return root.value();
     }
 
-    public double calculate(final double realValue) throws DivisionByZeroException, VariableValueExpectationException {
+    public double calculate(final double realValue) throws DivisionByZeroException {
         variableValue = realValue;
         return root.value();
     }
@@ -181,7 +167,7 @@ public class Expression {
     }
 
     private interface Function {
-        double value() throws VariableValueExpectationException;
+        double value();
 
         boolean isVarExpected();
     }
@@ -341,7 +327,7 @@ public class Expression {
         }
 
         @Override
-        public double value() throws VariableValueExpectationException {
+        public double value() {
             final double dividend = lChild.value();
             final double divisor = rChild.value();
             //System.out.println(dividend + " / " + divisor + " = " + (dividend / divisor));
@@ -371,7 +357,7 @@ public class Expression {
         }
 
         @Override
-        public double value() throws VariableValueExpectationException {
+        public double value() {
             final double m1 = lChild.value();
             final double m2 = rChild.value();
             //System.out.println(m1 + " * " + m2 + " = " + (m1 * m2));
@@ -397,7 +383,7 @@ public class Expression {
         }
 
         @Override
-        public double value() throws VariableValueExpectationException {
+        public double value() {
             final double minuend = lChild.value();
             final double subtrahend = rChild.value();
 
@@ -422,7 +408,7 @@ public class Expression {
         }
 
         @Override
-        public double value() throws VariableValueExpectationException {
+        public double value() {
             final double s1 = lChild.value();
             final double s2 = rChild.value();
             //System.out.println(s1 + " + " + s2 + " = " + (s1 + s2));
@@ -438,11 +424,8 @@ public class Expression {
 
     protected class Variable implements Function {
         @Override
-        public double value() throws VariableValueExpectationException {
-            if (variableValue == null)
-                throw new VariableValueExpectationException();
-            else
-                return variableValue;
+        public double value() {
+            return variableValue;
         }
 
         @Override

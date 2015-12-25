@@ -3,7 +3,7 @@ package ru.spbstu.appmath.strogalshchikova;
 import ru.spbstu.appmath.strogalshchikova.exceptions.*;
 
 public class Calculator {
-    public static double calculate(final String[] input) throws WrongSyntaxException, ParenthesesBalanceException, UnhandledLexemeException, WrongRangeException, TooManyVariablesException, VariableValueExpectationException {
+    public static double calculate(final String[] input) throws WrongSyntaxException {
         final Expression expression = new Expression(input[0]);
         final boolean isVarExpected = expression.isVarExpected();
 
@@ -42,8 +42,6 @@ public class Calculator {
             return "Division by zero.";
         } catch (VariableValueExpectationException e) {
             return "Variable value was expected.";
-        } catch (WrongRangeException e) {
-            return "Wrong range.";
         } catch (WrongSyntaxException e) {
             return "Wrong syntax.";
         }
@@ -69,10 +67,10 @@ public class Calculator {
         return answer;
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         System.out.println(response(args));
     }
-
+*/
 
 }
 
