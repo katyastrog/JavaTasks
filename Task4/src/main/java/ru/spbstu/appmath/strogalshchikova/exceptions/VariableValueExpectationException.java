@@ -1,6 +1,6 @@
 package ru.spbstu.appmath.strogalshchikova.exceptions;
 
-public class VariableValueExpectationException extends Exception {
+public class VariableValueExpectationException extends WrongSyntaxException {
     public VariableValueExpectationException() {
         super();
     }

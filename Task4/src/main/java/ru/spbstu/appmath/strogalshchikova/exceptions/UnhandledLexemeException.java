@@ -1,6 +1,6 @@
 package ru.spbstu.appmath.strogalshchikova.exceptions;
 
-public class UnhandledLexemeException extends Exception {
+public class UnhandledLexemeException extends WrongSyntaxException {
     public UnhandledLexemeException() {
         super();
     }

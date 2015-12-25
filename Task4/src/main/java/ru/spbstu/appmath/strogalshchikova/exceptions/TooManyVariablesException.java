@@ -1,7 +1,7 @@
 package ru.spbstu.appmath.strogalshchikova.exceptions;
 
 
-public class TooManyVariablesException extends Exception {
+public class TooManyVariablesException extends WrongSyntaxException {
     public TooManyVariablesException() {
         super();
     }

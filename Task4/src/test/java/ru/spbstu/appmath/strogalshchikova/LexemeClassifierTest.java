@@ -57,13 +57,13 @@ public class LexemeClassifierTest {
     @Test
     public void testClassifyCorrectly() throws Exception {
         if (type != null)
-            Assert.assertEquals(LexemeClassifier.classify(input), type);
+            Assert.assertEquals(Lexeme.classify(input), type);
     }
 
     @Test(expected = UnhandledLexemeException.class)
     public void testClassifyIncorrectly() throws Exception {
         if (type == null)
-            LexemeClassifier.classify(input);
+            Lexeme.classify(input);
         else
             throw new UnhandledLexemeException("fake");
     }

@@ -48,10 +48,6 @@ public class ParserTest {
 
             Assert.assertEquals(data.replaceAll("\\s", "").length(), parsedInputLen);
 
-//            for (Lexeme lexeme : parsedInput) {
-//                System.out.println(lexeme.getType() + ": '" + lexeme + "' ");
-//            }
-//            System.out.println();
         }
 
         for (String data : incorrectInput) {
