@@ -81,6 +81,7 @@ public class Expression {
                 default:
                     throw new UnhandledLexemeException();
             }
+
             if (parentheses < 0)
                 throw new ParenthesesBalanceException();
 
