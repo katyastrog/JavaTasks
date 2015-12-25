@@ -80,7 +80,7 @@ public class FileHandler {
             results[0][j] = exp.toString();
             for (int i = 1; i < n; i++) {
                 try {
-                    results[i][j] = String.valueOf(exp.calculate(range.getMin() + range.getStep() * (double)i));
+                    results[i][j] = String.valueOf(exp.calculate(range.getMin() + range.getStep() * (double)(i-1)));
                 } catch (DivisionByZeroException e) {
                     results[i][j] = "Division by zero";
                 }
@@ -105,7 +105,7 @@ public class FileHandler {
                 }
                 line.append("\r\n");
                 writer.write(line.toString());
-                System.out.println(line.toString());
+                //System.out.println(line.toString());
             }
 
         } catch (IOException e) {
@@ -148,13 +148,13 @@ public class FileHandler {
     public static void main(String[] args) throws WrongRangeException, WrongSyntaxException, IOException {
         final String INPUT_FILE = "./src/resources/input.txt";
         final String OUTPUT_FILE = "./src/resources/output.txt";
-        final String RANGE = "-4:8:0.8";
+        final String RANGE = "-4:8:0.5";
 
         final String[] input = new String[]{INPUT_FILE, OUTPUT_FILE, RANGE};
 
-        System.out.println(input[0]);
-        System.out.println(input[1]);
-        System.out.println(input[2]);
+//        System.out.println(input[0]);
+//        System.out.println(input[1]);
+//        System.out.println(input[2]);
 
         final FileHandler handler = new FileHandler(input);
         handler.run();
