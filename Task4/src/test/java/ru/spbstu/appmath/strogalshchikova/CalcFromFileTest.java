@@ -45,7 +45,7 @@ public class CalcFromFileTest {
 
         try (final BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (String[] input : inputList) {
-                String result = Calculator.getAnswer(input) + "\n";
+                String result = Calculator.getAnswer(input) + "\r\n";
                 writer.write(result);
                 //System.out.print(result);
             }
