@@ -71,7 +71,8 @@ public class FileHandler {
         try (final Scanner scanner = new Scanner(file)) {
             while (scanner.hasNextLine()) {
                 final String line = scanner.nextLine();
-
+                if (line.trim().length() == 0)
+                    continue;
                 try {
                     expressions.add(new Expression(line));
                 } catch (WrongSyntaxException e) {
