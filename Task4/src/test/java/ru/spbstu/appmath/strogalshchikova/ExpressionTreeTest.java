@@ -36,7 +36,7 @@ public class ExpressionTreeTest {
 
     @Test
     public void testSimplify() throws Exception {
-        final Expression simplifiedExp = new Expression(ExpressionUtilities.simplify(Parser.parse(input)));
+        final Expression simplifiedExp = new Expression(ExpressionUtilities.simplify(Expression.Parser.parse(input)));
         final Expression expectedExp = new Expression(expected);
 
         System.out.println(input + " == " + expectedExp);

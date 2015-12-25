@@ -1,0 +1,8 @@
+4445.0
+3.0
+-149717.0
+3083.1500000000005
+Parentheses are not balanced.
+18092.0
+Wrong syntax.
+Division by zero.

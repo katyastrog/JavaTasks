@@ -5,7 +5,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import ru.spbstu.appmath.strogalshchikova.exceptions.ParenthesesBalanceException;
 import ru.spbstu.appmath.strogalshchikova.exceptions.TooManyVariablesException;
-import ru.spbstu.appmath.strogalshchikova.exceptions.WrongRangeException;
 import ru.spbstu.appmath.strogalshchikova.exceptions.WrongSyntaxException;
 
 import java.util.List;
@@ -40,10 +39,10 @@ public class AnalyzerTest {
     public void testAnalyze() throws Exception {
         for (String data : correctInput) {
             System.out.print(data + " -- ");
-            final List<Lexeme> parsedInput = Parser.parse(data);
-            Analyzer.analyze(parsedInput);
+            final List<Expression.Lexeme> parsedInput = Expression.Parser.parse(data);
+            Expression.analyze(parsedInput);
 
-            for (Lexeme l : parsedInput) {
+            for (Expression.Lexeme l : parsedInput) {
                 System.out.print("'" + l + "' ");
             }
             System.out.println();
@@ -53,13 +52,13 @@ public class AnalyzerTest {
         for (String data : incorrectInput) {
             //System.out.print(data + " -- ");
             try {
-                Analyzer.analyze(Parser.parse(data));
+                Expression.analyze(Expression.Parser.parse(data));
             } catch (TooManyVariablesException ex) {
                 System.out.println("Too Many Variables");
-            } catch (WrongSyntaxException ex) {
-                System.out.println("Wrong Syntax");
             } catch (ParenthesesBalanceException ex) {
                 System.out.println("Parentheses Balance Exception");
+            } catch (WrongSyntaxException ex) {
+                System.out.println("Wrong Syntax");
             } catch (Exception ex) {
                 System.out.println("Undefined exception");
             }

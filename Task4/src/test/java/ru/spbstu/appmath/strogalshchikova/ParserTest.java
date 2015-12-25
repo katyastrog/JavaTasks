@@ -1,10 +1,7 @@
 package ru.spbstu.appmath.strogalshchikova;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import ru.spbstu.appmath.strogalshchikova.exceptions.UnhandledLexemeException;
 
 import java.util.List;
 
@@ -37,12 +34,12 @@ public class ParserTest {
     @Test
     public void testParse() throws Exception {
         for (String data : correctInput) {
-            List<Lexeme> parsedInput = Parser.parse(data);
+            List<Expression.Lexeme> parsedInput = Expression.Parser.parse(data);
             Assert.assertNotNull(parsedInput);
 
             int parsedInputLen = 0;
 
-            for (Lexeme lexeme : parsedInput) {
+            for (Expression.Lexeme lexeme : parsedInput) {
                 parsedInputLen += lexeme.getLen();
             }
 
@@ -51,11 +48,11 @@ public class ParserTest {
         }
 
         for (String data : incorrectInput) {
-            List<Lexeme> lexemes = Parser.parse(data);
+            List<Expression.Lexeme> lexemes = Expression.Parser.parse(data);
             //System.out.println(data);
             int parsedInputLen = 0;
 
-            for (Lexeme l : lexemes)
+            for (Expression.Lexeme l : lexemes)
                 parsedInputLen += l.getLen();
 
             Assert.assertNotEquals(parsedInputLen, data.replaceAll("\\s", "").length());
